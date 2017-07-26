@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Author: Dante Bazaldua
+
+import click
+from PositiveAuth import PositiveAuth
+from queries import Queries
+
+FirebaseInstance = None
+
+@click.group()
+def positransfer():
+    pass
+
+@positransfer.command()
+def teachme():
+    """ Mostrar uso de la aplicación CLI. """
+    click.secho('Positive Database Admin v0.1', bold=True)
+    click.echo('Cada transacción es posible buscarla a través de un id de transacción o un ID de Persona. Para ello es necesario ejecutar el siguiente comando: \n')
+    click.echo('\t$ positransfer check --mode=TIPO_DE_QUERY --id=ID_CONSULTA')
+    click.echo('\nTIPO_DE_QUERY: Persona | Transfer')
+
+@positransfer.command()
+@click.option('--mode', nargs=1, required=True, prompt="Forma de buscar(Persona|Transfer)")
+@click.option('--id', nargs=1, required=True, prompt="ID a consultar")
+def check( mode, id ):
+    """ Obtiene una información de rama especifica."""
+
+    click.secho('\nPositive Database Admin v0.1', bold=True)
+    pstfile = PositiveAuth()
+    if pstfile.readJson(): # Si hay archivo de configuracion
+
+        print "Modo: [%30s]\nID:   [%30s]" %( str( mode ), str( id ) )
+
+        global FirebaseInstance
+        FirebaseInstance = Queries( pstfile.firebase, pstfile.user )
+
+        if mode == "Persona":
+            FirebaseInstance.requestByUserId( id )
+        elif mode == "Transfer":
+            FirebaseInstance.requestByTransferId( id )
+        else:
+            print "No hay búsqueda por ese criterio."
+
+    else:
+        click.echo("Verifique su archivo de configuración.")
+
+cli = click.CommandCollection(sources=[ positransfer ])
+
+if __name__ == '__main__':
+    cli()
