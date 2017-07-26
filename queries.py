@@ -76,7 +76,11 @@ class Queries( object ):
         if empresa != None and persona != None and encuesta != None:
             print "\nResumen: ( %s )" %( str(idtransfer))
             resume.add_row(['Fecha',rawData[ idtransfer ]['date'],'-'])
-            resume.add_row(['Fecha CLOUD',rawData[ idtransfer ]['date_final'],'-'])
+            if 'date_final' in rawData[ idtransfer ]:
+                fecha = rawData[ idtransfer ]['date_final']
+            else:
+                fecha = "Sin informacion"
+            resume.add_row(['Fecha CLOUD', fecha,'-'])
             resume.add_row(['Nombre',persona['Nombre'] + " " + persona['ApPat'] + " " + persona['ApMat'], pkey])
             resume.add_row(['Evaluacion', encuesta['clasificacion'], vkey])
             resume.add_row(['Empresa', empresa['NComercial'], ekey])
