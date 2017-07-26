@@ -12,6 +12,9 @@ class Queries( object ):
     db          = None
     storage     = None
 
+    information = None
+    id_tr       = None
+
 
     def __init__( self, confobj = None, usrobj = None ):
         try:
@@ -38,6 +41,16 @@ class Queries( object ):
             print e
             return None
 
+    def reprocess( self ):
+        try:
+            print "Reprocesar: %s" %( self.id_tr )
+            self.db.child("Transfer").child(self.id_tr).update({"processed": False})
+            print "Completado! Bye :)"
+
+        except Exception as e:
+            print e
+
+
     def thirdEye( self, rawData, idtransfer ):
         """
         thirdEye is a function which create all the queries and show the information in the screen.
@@ -45,6 +58,9 @@ class Queries( object ):
         rawData - The information of the transaction
         idtransfer - The transaction key
         """
+        # Se guarda como atributo de la clase
+        self.information = rawData
+        self.id_tr  = idtransfer
 
         idp = rawData[ idtransfer ]['key_persona']
         ide = rawData[ idtransfer ]['key_empresa']

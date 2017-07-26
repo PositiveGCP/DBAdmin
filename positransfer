@@ -37,10 +37,30 @@ def check( mode, id ):
 
         if mode == "Persona":
             FirebaseInstance.requestByUserId( id )
+
         elif mode == "Transfer":
             FirebaseInstance.requestByTransferId( id )
+
         else:
             print "No hay búsqueda por ese criterio."
+
+        if mode == 'Persona' or mode == 'Transfer':
+
+            while True:
+                click.echo('\n¿Desea reprocesar?[yn]: ', nl=False)
+                confirm = click.getchar()
+                click.echo()
+                if confirm == 'y':
+                    FirebaseInstance.reprocess()
+                    break
+                elif confirm == 'n':
+                    print "Bye!"
+                    break
+                else:
+                    print "Limítese a un y|n"
+
+        else:
+            pass
 
     else:
         click.echo("Verifique su archivo de configuración.")
