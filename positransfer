@@ -13,6 +13,22 @@ def positransfer():
     pass
 
 @positransfer.command()
+@click.option('--id', nargs=1, required=True, prompt="ID empresa")
+def usersfrom( id ):
+    """ Obtener usuarios de una empresa. """
+    click.secho('Positive Database Admin v0.1', bold=True)
+    pstfile = PositiveAuth()
+    if pstfile.readJson(): # Si hay archivo de configuracion
+
+        print "ID:   [%30s]" %( str( id ) )
+
+        global FirebaseInstance
+        FirebaseInstance = Queries( pstfile.firebase, pstfile.user )
+        FirebaseInstance.getUsersById( id )
+
+
+
+@positransfer.command()
 def teachme():
     """ Mostrar uso de la aplicación CLI. """
     click.secho('Positive Database Admin v0.1', bold=True)

@@ -133,3 +133,22 @@ class Queries( object ):
 
         except Exception as e:
             print e
+
+    def getUsersById( self, id ):
+        """
+//TODO: USER description
+        """
+        try:
+
+            whois = self.db.child("Usuarios").order_by_child("Empresa").equal_to( str(id) ).get()
+            # Aquí lo da con todo y ID
+            if whois is not None:
+                raw = whois.val()
+                print "Existen: %d" % ( len( raw ) )
+                count = 1
+                for e in raw:
+                    print "%d - %s" % ( count, raw[ e ][ 'email' ] )
+                    count = count + 1
+
+        except Exception as e:
+            print e
